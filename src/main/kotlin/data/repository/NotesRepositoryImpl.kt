@@ -25,6 +25,18 @@ class NotesRepositoryImpl(private val database: Database) {
         toNote(newNote)
     }
 
+    suspend fun updateNote(id: String, note: Note) = database.dbQuery {
+        val updateNote = NoteEntity.findById(id.toUUID())?: throw NotFoundException()
+
+        updateNote.apply {
+            this.title = note.title
+            this.content = note.content
+            this.updatedAt = System.currentTimeMillis()
+        }
+
+        toNote(updateNote)
+    }
+
     suspend fun deleteNote(id: String) = database.dbQuery {
         val note = NoteEntity.findById(id.toUUID())?: throw NotFoundException()
 

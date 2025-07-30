@@ -37,14 +37,18 @@ class NoteRoute(
     }
 
     private fun Route.updateNote() {
-        put {  }
+        put("/{id}") {
+            val id = call.parameters["id"]?: throw NotFoundException()
+            val note = call.receive<Note>()
+
+            call.respond(noteRepo.updateNote(id, note))
+        }
     }
 
     private fun Route.deleteNote() {
         delete("/{id}") {
             val id = call.parameters["id"]?: throw NotFoundException()
 
-            println("🧏🏻 Mashook pak eko")
             noteRepo.deleteNote(id)
             call.respond("Note deleted.")
         }
