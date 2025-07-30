@@ -2,13 +2,14 @@ package id.neotica.presentation
 
 import id.neotica.data.repository.NotesRepositoryImpl
 import id.neotica.domain.Note
+import io.ktor.server.plugins.NotFoundException
+import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
-import org.jetbrains.exposed.sql.not
-import java.util.UUID
 
 class NoteRoute(
     private val noteRepo: NotesRepositoryImpl
@@ -18,6 +19,7 @@ class NoteRoute(
             getNotes()
             postNote()
             updateNote()
+            deleteNote()
         }
     }
 
@@ -28,14 +30,23 @@ class NoteRoute(
     }
 
     private fun Route.postNote() {
-        val noteDummy = Note(
-            title = "Legend",
-            content = "hahahahah",
-        )
-        post { call.respond(noteRepo.postNote(noteDummy)) }
+        post {
+            val note = call.receive<Note>()
+            call.respond(noteRepo.postNote(note))
+        }
     }
 
     private fun Route.updateNote() {
         put {  }
+    }
+
+    private fun Route.deleteNote() {
+        delete("/{id}") {
+            val id = call.parameters["id"]?: throw NotFoundException()
+
+            println("🧏🏻 Mashook pak eko")
+            noteRepo.deleteNote(id)
+            call.respond("Note deleted.")
+        }
     }
 }
