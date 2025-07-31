@@ -1,48 +1,96 @@
-# notes
+# Ktor Notes API
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+This repository contains the backend for the [CMP Notes Client](https://github.com/laetuz/CMP-Notes-Client), 
+a multiplatform app built with Compose. 
+It's a modern and secure RESTful API for managing notes, 
+developed with Ktor, Kotlin, and Exposed for type-safe database access.
 
-Here are some useful links to get you started:
+A modern, robust, and secure RESTful API for managing notes,
+built with Kotlin and the Ktor framework. This project serves 
+as a powerful backend foundation, demonstrating best practices in API development, 
+authentication, and database interaction.
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+Visit the client side repo: [CMP Notes Client](https://github.com/laetuz/CMP-Notes-Client)
 
-## Features
+---
 
-Here's a list of features included in this project:
+## ✨ Features
 
-| Name                                                                   | Description                                                                        |
-| ------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
-| [Authentication](https://start.ktor.io/p/auth)                         | Provides extension point for handling the Authorization header                     |
-| [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
-| [Authentication Basic](https://start.ktor.io/p/auth-basic)             | Handles 'Basic' username / password authentication scheme                          |
-| [Call Logging](https://start.ktor.io/p/call-logging)                   | Logs client requests                                                               |
-| [Koin](https://start.ktor.io/p/koin)                                   | Provides dependency injection                                                      |
-| [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
-| [Exposed](https://start.ktor.io/p/exposed)                             | Adds Exposed database to your application                                          |
-| [Postgres](https://start.ktor.io/p/postgres)                           | Adds Postgres database to your application                                         |
-| [CORS](https://start.ktor.io/p/cors)                                   | Enables Cross-Origin Resource Sharing (CORS)                                       |
+* **User Authentication**: Secure user registration and login using **Basic Authentication** and **BCrypt**.
+* **CRUD Operations for Notes**: Full Create, Read, Update, and Delete functionality for user-specific notes.
+* **Dependency Injection**: Clean, decoupled architecture powered by **Koin**.
+* **Modern Database Access**: Type-safe ORM using **JetBrains Exposed**.
+* **Asynchronous by Design**: Built on Kotlin Coroutines for high-performance, non-blocking I/O.
 
-## Building & Running
+---
 
-To build or run the project, use one of the following tasks:
+## 🛠️ Technology Stack
 
-| Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
+* **Framework**: [Ktor](httpshttps://ktor.io/)
+* **Language**: [Kotlin](https://kotlinlang.org/)
+* **Authentication**: Ktor Basic Auth with BCrypt hashing
+* **Database**: [PostgreSQL](https://www.postgresql.org/)
+* **Database Access**: [JetBrains Exposed](https://github.com/JetBrains/Exposed)
+* **Dependency Injection**: [Koin](https://insert-koin.io/)
+* **Serialization**: [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)
 
-If the server starts successfully, you'll see the following output:
+---
 
-```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
-```
+## 🚀 Getting Started
 
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing.
+
+### Prerequisites
+
+* **JDK 17** or higher.
+* **PostgreSQL** database server installed and running. or
+* **Docker Desktop** dto run the docker script for the postgresql setup.
+* An IDE like IntelliJ IDEA is recommended.
+
+### Setup & Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/laetuz/ktor-notes-api.git](https://github.com/laetuz/ktor-notes-api.git)
+    cd project
+    ```
+
+2.  **Set up the PostgreSQL Database:**
+    * Open docker-compose.yml and run services. 
+    This will automatically setup the container for postgres.
+    * Connect to your PostgreSQL instance.
+    * Create a new database for the project (e.g., `notes_db`).
+    * The necessary tables will be created automatically by Exposed when the application starts for the first time.
+
+3.  **Configure Environment Variables:**
+    This project uses environment variables to manage sensitive data like database credentials. You can set these in your IDE's run configuration or export them in your terminal.
+
+    | Variable            | Description                                        | Example Value                                  |
+        | ------------------- | -------------------------------------------------- | ---------------------------------------------- |
+    | `DATABASE_URL`      | The JDBC URL for your PostgreSQL database.         | `jdbc:postgresql://localhost:5432/notes_db`    |
+    | `DATABASE_USER`     | The username for your database.                    | `postgres`                                     |
+    | `DATABASE_PASSWORD` | The password for your database user.               | `your_secure_password`                         |
+
+4.  **Run the Application:**
+    Use the Gradle wrapper to build and run the server.
+    ```bash
+    ./gradlew run
+    ```
+    The server will start, typically on `http://localhost:8081`.
+
+---
+
+## 📖 API Endpoints
+
+* I have provided the API documentation in a notebook format  [here](https://github.com/laetuz/ktor-notes-api/blob/main/src/main/resources/ApiDocs.ipynb)
+* or you could go to **/notes/src/main/resources/ApiDocs.ipynb** in this project scope. 
+
+---
+
+## 📂 Project Structure
+
+A brief overview of the key directories in the project. ~later lah ya i will update.
+
+---
+
+Visit our website: [Neotica](https://neotica.id)

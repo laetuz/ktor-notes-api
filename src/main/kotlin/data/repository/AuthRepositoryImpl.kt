@@ -6,6 +6,7 @@ import id.neotica.data.dao.user.UserEntity
 import id.neotica.data.dao.user.UserTable
 import id.neotica.data.repository.mapper.toUser
 import id.neotica.domain.NeoUser
+import id.neotica.extension.toUUID
 import io.ktor.server.plugins.NotFoundException
 
 class AuthRepositoryImpl(private val database: Database) {
@@ -30,6 +31,15 @@ class AuthRepositoryImpl(private val database: Database) {
         println("✨ $passwordsMatch")
 
         if (passwordsMatch) "Success" else "Nope"
+    }
+
+    suspend fun deleteUser(id: String) = database.dbQuery {
+        val checkUsername = UserEntity.findById(id.toUUID())
+            ?: throw NotFoundException("dd")
+
+        checkUsername.delete()
+
+        "User ${checkUsername.username} deleted."
     }
 
     suspend fun checkUser(username: String) = database.dbQuery {

@@ -12,6 +12,7 @@ class AuthRoute(private val authRepo: AuthRepositoryImpl) {
         route.apply {
             login()
             register()
+            delete()
             getAllUser()
             checkUser()
         }
@@ -31,6 +32,14 @@ class AuthRoute(private val authRepo: AuthRepositoryImpl) {
         post {
             val user = call.receive<NeoUser>()
             call.respond(authRepo.register(user))
+        }
+    }
+
+    private fun Route.delete() {
+        delete {
+            val id = call.request.header("Id")
+                ?: return@delete call.respondText("Missing 'Id' header", status = HttpStatusCode.BadRequest)
+            call.respond(authRepo.deleteUser(id))
         }
     }
 
