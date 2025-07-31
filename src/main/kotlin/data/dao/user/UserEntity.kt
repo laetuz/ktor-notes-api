@@ -8,7 +8,6 @@ import java.util.UUID
 class UserEntity(id: EntityID<UUID>): UUIDEntity(id) {
     companion object: UUIDEntityClass<UserEntity>(UserTable)
 
-    var userId: UserEntity by UserEntity referencedOn UserTable.id
     var username: String by UserTable.username
     var email: String by UserTable.email
     var password: String by UserTable.password
