@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.jwt)
     implementation(libs.ktor.server.call.logging)
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)

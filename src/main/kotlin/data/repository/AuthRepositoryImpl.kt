@@ -1,5 +1,7 @@
 package id.neotica.data.repository
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import id.neotica.BCrypt
 import id.neotica.data.Database
 import id.neotica.data.dao.user.UserEntity
@@ -7,7 +9,9 @@ import id.neotica.data.dao.user.UserTable
 import id.neotica.data.repository.mapper.toUser
 import id.neotica.domain.NeoUser
 import id.neotica.extension.toUUID
-import io.ktor.server.plugins.NotFoundException
+import io.ktor.server.plugins.*
+import java.util.*
+import kotlin.time.Duration.Companion.days
 
 class AuthRepositoryImpl(private val database: Database) {
     suspend fun register(user: NeoUser) = database.dbQuery {
@@ -30,7 +34,20 @@ class AuthRepositoryImpl(private val database: Database) {
         val passwordsMatch = BCrypt.checkpw(password, userEntity.password)
         println("✨ $passwordsMatch")
 
-        if (passwordsMatch) "Success" else "Nope"
+        val token = JWT.create()
+            .withAudience("http://127.0.0.1:8081/notes")
+            .withIssuer("http://127.0.0.1:8081/")
+            .withClaim("username", username)
+            .withExpiresAt(
+                Date(System.currentTimeMillis() + 7.days.inWholeMilliseconds))
+            .sign(Algorithm.HMAC256("lol"))
+
+
+        if (passwordsMatch) {
+            hashMapOf("token" to token)
+        } else {
+            "Nope"
+        }
     }
 
     suspend fun deleteUser(id: String) = database.dbQuery {

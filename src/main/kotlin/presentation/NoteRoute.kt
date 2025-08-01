@@ -2,6 +2,7 @@ package id.neotica.presentation
 
 import id.neotica.data.repository.NotesRepositoryImpl
 import id.neotica.domain.Note
+import io.ktor.server.auth.authenticate
 import io.ktor.server.plugins.NotFoundException
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -24,8 +25,10 @@ class NoteRoute(
     }
 
     private fun Route.getNotes() {
-        get {
-            call.respond(noteRepo.getAllNotes())
+        authenticate("auth-jwt") {
+            get {
+                call.respond(noteRepo.getAllNotes())
+            }
         }
     }
 
