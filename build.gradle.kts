@@ -30,6 +30,7 @@ dependencies {
 //    implementation(libs.exposed.sql)
     implementation(libs.exposed.migration)
     implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.r2dbc)
     implementation(libs.h2)
     implementation(libs.postgresql)
     implementation(libs.hikari.core)

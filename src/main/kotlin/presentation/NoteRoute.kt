@@ -2,15 +2,10 @@ package id.neotica.presentation
 
 import id.neotica.data.repository.NotesRepositoryImpl
 import id.neotica.domain.Note
-import io.ktor.server.auth.authenticate
-import io.ktor.server.plugins.NotFoundException
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.delete
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.put
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 class NoteRoute(
     private val noteRepo: NotesRepositoryImpl
@@ -24,11 +19,13 @@ class NoteRoute(
         }
     }
 
+    fun public(route: Route) {
+        route.apply {  }
+    }
+
     private fun Route.getNotes() {
-        authenticate("auth-jwt") {
-            get {
-                call.respond(noteRepo.getAllNotes())
-            }
+        get {
+            call.respond(noteRepo.getAllNotes())
         }
     }
 

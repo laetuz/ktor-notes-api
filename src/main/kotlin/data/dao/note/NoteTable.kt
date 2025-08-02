@@ -1,10 +1,9 @@
 package id.neotica.data.dao.note
 
-import id.neotica.data.dao.user.UserTable
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 
 object NoteTable: UUIDTable("Note") {
-    val userId = reference("user_id", UserTable).nullable()
+    val userId = uuid("user_id").nullable()
     val title = varchar("title", 255).nullable()
     val content = text("content").nullable()
     val isPinned = bool("is_pinned").default(false)

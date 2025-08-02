@@ -27,7 +27,7 @@ fun Application.configureSecurity() {
             verifier(
                 JWT
                     .require(Algorithm.HMAC256("lol"))
-                    .withAudience("http://127.0.0.1:8081/notes")
+                    .withAudience("http://127.0.0.1:8081/user")
                     .withIssuer("http://127.0.0.1:8081/")
                     .build()
             )

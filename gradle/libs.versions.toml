@@ -1,7 +1,6 @@
 
 [versions]
 exposed-version = "1.0.0-beta-5"
-exposed-migration = "1.0.0-beta-3"
 h2-version = "2.3.232"
 koin-version = "3.5.6"
 kotlin-version = "2.1.10"
@@ -23,6 +22,7 @@ exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.r
 #exposed-sql = { group = "org.jetbrains.exposed", name = "exposed-sql", version.ref = "exposed-version" }
 exposed-migration = { group = "org.jetbrains.exposed", name = "exposed-migration", version.ref = "exposed-version" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed-version" }
+exposed-r2dbc = { module = "org.jetbrains.exposed:exposed-r2dbc", version.ref = "exposed-version" }
 h2 = { module = "com.h2database:h2", version.ref = "h2-version" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres-version" }
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor-version" }

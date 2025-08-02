@@ -14,6 +14,12 @@ class NotesRepositoryImpl(private val database: Database) {
         notes.map(::toNote)
     }
 
+    suspend fun getAllNotesPublic() = database.dbQuery {
+        val notes = NoteEntity.all().filter { it.userId == null }
+
+        notes.map(::toNote)
+    }
+
     suspend fun postNote(note: Note) = database.dbQuery {
         val newNote = NoteEntity.new {
             title = note.title
@@ -29,6 +35,7 @@ class NotesRepositoryImpl(private val database: Database) {
         val updateNote = NoteEntity.findById(id.toUUID())?: throw NotFoundException()
 
         updateNote.apply {
+//            this.userId = note. here
             this.title = note.title
             this.content = note.content
             this.updatedAt = System.currentTimeMillis()

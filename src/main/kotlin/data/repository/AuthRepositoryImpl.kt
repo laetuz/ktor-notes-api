@@ -35,7 +35,7 @@ class AuthRepositoryImpl(private val database: Database) {
         println("✨ $passwordsMatch")
 
         val token = JWT.create()
-            .withAudience("http://127.0.0.1:8081/notes")
+            .withAudience("http://127.0.0.1:8081/user")
             .withIssuer("http://127.0.0.1:8081/")
             .withClaim("username", username)
             .withExpiresAt(
