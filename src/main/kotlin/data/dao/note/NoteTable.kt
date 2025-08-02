@@ -1,7 +1,7 @@
 package id.neotica.data.dao.note
 
 import id.neotica.data.dao.user.UserTable
-import org.jetbrains.exposed.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 
 object NoteTable: UUIDTable("Note") {
     val userId = reference("user_id", UserTable).nullable()
