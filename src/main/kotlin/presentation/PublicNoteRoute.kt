@@ -2,18 +2,19 @@ package id.neotica.presentation
 
 import id.neotica.data.repository.NotesRepositoryImpl
 import id.neotica.domain.Note
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.auth.jwt.JWTPrincipal
-import io.ktor.server.auth.principal
-import io.ktor.server.plugins.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.plugins.NotFoundException
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
 
-class NoteRoute(
+class PublicNoteRoute(
     private val noteRepo: NotesRepositoryImpl,
 ) {
-    fun invoke(route: Route) {
+    fun register(route: Route) {
         route.apply {
             getNotes()
             postNote()
@@ -24,20 +25,14 @@ class NoteRoute(
 
     private fun Route.getNotes() {
         get {
-            val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.getClaim("id", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-            call.respond(noteRepo.getAllNotes(userId))
+            call.respond(noteRepo.getAllPublicNotes())
         }
     }
 
     private fun Route.postNote() {
         post {
-            val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.getClaim("id", String::class) ?: return@post call.respond(HttpStatusCode.Unauthorized)
-
             val note = call.receive<Note>()
-            call.respond(noteRepo.postNote(userId, note))
+            call.respond(noteRepo.postPublicNote(note))
         }
     }
 

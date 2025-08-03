@@ -32,12 +32,12 @@ class AuthRepositoryImpl(private val database: Database) {
             ?: throw NotFoundException("dd")
 
         val passwordsMatch = BCrypt.checkpw(password, userEntity.password)
-        println("✨ $passwordsMatch")
+        println("✨ password matched: $passwordsMatch")
 
         val token = JWT.create()
             .withAudience("http://127.0.0.1:8081/user")
             .withIssuer("http://127.0.0.1:8081/")
-            .withClaim("username", username)
+            .withClaim("id", userEntity.id)
             .withExpiresAt(
                 Date(System.currentTimeMillis() + 7.days.inWholeMilliseconds))
             .sign(Algorithm.HMAC256("lol"))

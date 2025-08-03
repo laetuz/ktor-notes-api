@@ -32,7 +32,7 @@ fun Application.configureSecurity() {
                     .build()
             )
             validate {
-                if (it.payload.getClaim("username").asString().isNotEmpty()) {
+                if (it.payload.getClaim("id").asString().isNotEmpty()) {
                     JWTPrincipal(it.payload)
                 } else {
                     println("✨ jwt auth failed.")
