@@ -32,7 +32,7 @@ class UserRoute(
             val principal = call.principal<JWTPrincipal>()
             val userId = principal?.getClaim("id", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
-            val respond = userRepo.checkUser(userId)
+            val respond = userRepo.checkUsername(userId)
             call.respond(respond)
         }
     }

@@ -5,7 +5,9 @@ import id.neotica.data.DatabaseImpl
 import id.neotica.data.repository.AuthRepositoryImpl
 import id.neotica.data.repository.NotesRepositoryImpl
 import id.neotica.data.repository.UserRepositoryImpl
+import id.neotica.domain.repository.AuthRepository
 import id.neotica.domain.repository.NotesRepository
+import id.neotica.domain.repository.UserRepository
 import id.neotica.presentation.AuthRoute
 import id.neotica.presentation.NoteRoute
 import id.neotica.presentation.PublicNoteRoute
@@ -19,8 +21,8 @@ val appModule = module {
 
     //repositories
     singleOf(::NotesRepositoryImpl).bind(NotesRepository::class)
-    singleOf(::AuthRepositoryImpl)
-    singleOf(::UserRepositoryImpl)
+    singleOf(::AuthRepositoryImpl).bind(AuthRepository::class)
+    singleOf(::UserRepositoryImpl).bind(UserRepository::class)
 
     //routes
     singleOf(::NoteRoute)
