@@ -17,6 +17,7 @@ class PublicNoteRoute(
     fun register(route: Route) {
         route.apply {
             getNotes()
+            getNoteById()
             postNote()
             updateNote()
             deleteNote()
@@ -26,6 +27,13 @@ class PublicNoteRoute(
     private fun Route.getNotes() {
         get {
             call.respond(noteRepo.getAllPublicNotes())
+        }
+    }
+
+    private fun Route.getNoteById() {
+        get("/{id}") {
+            val noteId = call.parameters["id"]?: throw NotFoundException()
+            call.respond(noteRepo.getPublicNoteById(noteId))
         }
     }
 

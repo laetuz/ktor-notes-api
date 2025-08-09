@@ -21,6 +21,22 @@ class NotesRepositoryImpl(private val database: Database): NotesRepository {
         notes.map(::toNote)
     }
 
+    suspend fun getNoteById(noteId: String, userId: String): Note = database.dbQuery {
+        val note = NoteEntity.findById(noteId.toUUID())
+
+        if (note != null && note.userId == userId.toUUID()) {
+            toNote(note)
+        } else throw NotFoundException()
+    }
+
+    suspend fun getPublicNoteById(noteId: String): Note = database.dbQuery {
+        val note = NoteEntity.findById(noteId.toUUID())
+
+        if (note?.userId == null && note != null) {
+            toNote(note)
+        } else throw NotFoundException()
+    }
+
     override suspend fun postNote(userId: String, note: Note) = database.dbQuery {
         val newNote = NoteEntity.new {
             println("✨ id2: $userId")

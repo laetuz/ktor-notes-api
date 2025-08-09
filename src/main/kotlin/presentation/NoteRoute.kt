@@ -16,6 +16,7 @@ class NoteRoute(
     fun invoke(route: Route) {
         route.apply {
             getNotes()
+            getNoteById()
             postNote()
             updateNote()
             deleteNote()
@@ -28,6 +29,16 @@ class NoteRoute(
             val userId = principal?.getClaim("id", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
 
             call.respond(noteRepo.getAllNotes(userId))
+        }
+    }
+
+    private fun Route.getNoteById() {
+        get("/{id}") {
+            val principal = call.principal<JWTPrincipal>()
+            val userId = principal?.getClaim("id", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+
+            val noteId = call.parameters["id"]?: throw NotFoundException()
+            call.respond(noteRepo.getNoteById(noteId, userId))
         }
     }
 
