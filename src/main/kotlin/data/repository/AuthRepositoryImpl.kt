@@ -11,6 +11,7 @@ import id.neotica.domain.NeoUser
 import id.neotica.domain.TokenData
 import id.neotica.domain.repository.AuthRepository
 import id.neotica.extension.toUUID
+import id.neotica.utils.baseUrl
 import io.ktor.server.plugins.*
 import java.util.*
 import javax.security.auth.login.CredentialException
@@ -38,8 +39,7 @@ class AuthRepositoryImpl(private val database: Database): AuthRepository {
         println("✨ password matched: $passwordsMatch")
 
         val token = JWT.create()
-            .withAudience("http://127.0.0.1:8081/user")
-            .withIssuer("http://127.0.0.1:8081/")
+            .withIssuer("${baseUrl}/")
             .withClaim("id", userEntity.id)
             .withExpiresAt(
                 Date(System.currentTimeMillis() + 7.days.inWholeMilliseconds))
@@ -51,6 +51,10 @@ class AuthRepositoryImpl(private val database: Database): AuthRepository {
         } else {
             throw CredentialException()
         }
+    }
+
+    suspend fun logout() {
+
     }
 
     override suspend fun deleteUser(id: String) = database.dbQuery {
