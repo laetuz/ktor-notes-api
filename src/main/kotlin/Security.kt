@@ -10,18 +10,6 @@ import io.ktor.server.auth.jwt.jwt
 
 fun Application.configureSecurity() {
     authentication {
-//        basic(name = "auth-basic") {
-//            realm = "Access to the '/' path"
-//            validate { credentials ->
-//                val jetbrainsPasswordHash = BCrypt.hashpw("foobar", BCrypt.gensalt())
-//                println("🧏🏻 $jetbrainsPasswordHash")
-//                if (BCrypt.checkpw(credentials.password, jetbrainsPasswordHash)) {
-//                    UserIdPrincipal(credentials.name)
-//                } else {
-//                    null
-//                }
-//            }
-//        }
 
         jwt("auth-jwt") {
             realm = "access notes"
@@ -33,6 +21,23 @@ fun Application.configureSecurity() {
             )
             validate {
                 if (it.payload.getClaim("id").asString().isNotEmpty()) {
+                    JWTPrincipal(it.payload)
+                } else {
+                    println("✨ jwt auth failed.")
+                }
+            }
+        }
+
+        jwt("refresh-jwt") {
+            realm = "access notes refresh"
+            verifier(
+                JWT
+                    .require(Algorithm.HMAC256("lol"))
+                    .withIssuer("${baseUrl}/")
+                    .build()
+            )
+            validate {
+                if (it.payload.getClaim("refreshId").asString().isNotEmpty()) {
                     JWTPrincipal(it.payload)
                 } else {
                     println("✨ jwt auth failed.")

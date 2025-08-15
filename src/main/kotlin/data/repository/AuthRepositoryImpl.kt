@@ -45,16 +45,46 @@ class AuthRepositoryImpl(private val database: Database): AuthRepository {
                 Date(System.currentTimeMillis() + 7.days.inWholeMilliseconds))
             .sign(Algorithm.HMAC256("lol"))
 
+        val refreshToken = JWT.create()
+            .withIssuer("${baseUrl}/")
+            .withClaim("refreshId", userEntity.id)
+            .withExpiresAt(Date(System.currentTimeMillis() + 30.days.inWholeMilliseconds))
+            .sign(Algorithm.HMAC256("lol"))
 
         if (passwordsMatch) {
-            TokenData(token)
+            TokenData(
+                token = token,
+                refreshToken = refreshToken,
+                expirationTime = System.currentTimeMillis() + 7.days.inWholeMilliseconds
+            )
         } else {
             throw CredentialException()
         }
     }
 
-    suspend fun logout() {
+    override suspend fun refreshLogin(id: String) = database.dbQuery {
+        val userEntity = UserEntity.findById(id.toUUID())
+            ?.let { toUser(it) }
+            ?: throw NotFoundException("dd")
 
+        val token = JWT.create()
+            .withIssuer("${baseUrl}/")
+            .withClaim("id", userEntity.id)
+            .withExpiresAt(
+                Date(System.currentTimeMillis() + 7.days.inWholeMilliseconds))
+            .sign(Algorithm.HMAC256("lol"))
+
+        val refreshToken = JWT.create()
+            .withIssuer("${baseUrl}/")
+            .withClaim("refreshId", userEntity.id)
+            .withExpiresAt(Date(System.currentTimeMillis() + 30.days.inWholeMilliseconds))
+            .sign(Algorithm.HMAC256("lol"))
+
+        TokenData(
+            token = token,
+            refreshToken = refreshToken,
+            expirationTime = System.currentTimeMillis() + 7.days.inWholeMilliseconds
+        )
     }
 
     override suspend fun deleteUser(id: String) = database.dbQuery {

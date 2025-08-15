@@ -3,6 +3,9 @@ package id.neotica.presentation
 import id.neotica.data.repository.AuthRepositoryImpl
 import id.neotica.domain.NeoUser
 import io.ktor.http.*
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -11,6 +14,9 @@ class AuthRoute(private val authRepo: AuthRepositoryImpl) {
     fun invoke(route: Route) {
         route.apply {
             login()
+            authenticate("refresh-jwt") {
+                reLogin()
+            }
             register()
             delete()
             getAllUser()
@@ -24,7 +30,17 @@ class AuthRoute(private val authRepo: AuthRepositoryImpl) {
                 ?: return@get call.respondText("Missing 'username' header", status = HttpStatusCode.BadRequest)
             val password = call.request.header("Password")
                 ?: return@get call.respondText("Missing 'password' header", status = HttpStatusCode.BadRequest)
+
             call.respond(authRepo.login(username, password))
+        }
+    }
+
+    private fun Route.reLogin() {
+        get("/reload") {
+            val principal = call.principal<JWTPrincipal>()
+            val userId = principal?.getClaim("refreshId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+
+            call.respond(authRepo.refreshLogin(userId))
         }
     }
 
