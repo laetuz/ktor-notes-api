@@ -66,7 +66,6 @@ class NotesRepositoryImpl(private val database: Database): NotesRepository {
         val updateNote = NoteEntity.findById(id.toUUID())?: throw NotFoundException()
 
         updateNote.apply {
-            this.userId = note.userId?.toUUID()
             this.title = note.title
             this.content = note.content
             this.updatedAt = System.currentTimeMillis()
