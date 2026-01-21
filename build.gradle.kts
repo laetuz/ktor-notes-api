@@ -1,19 +1,36 @@
-
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
 }
 
 group = "id.neotica"
 version = "0.0.1"
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+    }
+}
+
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
 }
 
-repositories {
-    mavenCentral()
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+    generateKotlin = true
+}
+
+ksp {
+    arg("KOIN_DEFAULT_MODULE", "true")
 }
 
 dependencies {
@@ -37,6 +54,11 @@ dependencies {
     implementation(libs.ktor.server.cors)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
+
+    implementation(libs.androidx.room.runtime.jvm)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.sqlite.bundled)
+
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 }
