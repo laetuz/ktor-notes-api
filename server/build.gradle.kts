@@ -10,6 +10,16 @@ group = "id.neotica"
 version = "0.0.1"
 
 kotlin {
+    sourceSets {
+        main {
+            kotlin.srcDirs("../src/main/kotlin","../src/main/java")
+            resources.srcDirs("../src/main/resources")
+        }
+        test {
+            kotlin.srcDirs("../src/test/kotlin")
+            resources.srcDirs("../src/test/resources")
+        }
+    }
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }

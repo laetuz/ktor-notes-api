@@ -80,3 +80,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "notes-api"
+include(":ktor-notes-api")
+project(":ktor-notes-api").projectDir = file("./server")
