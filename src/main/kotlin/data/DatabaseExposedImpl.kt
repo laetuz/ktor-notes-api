@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTrans
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import kotlin.coroutines.CoroutineContext
 
-class DatabaseImpl(
+class DatabaseExposedImpl(
     private val ioContext: CoroutineContext = Dispatchers.IO
 ): id.neotica.data.Database {
     private val db: Database
