@@ -5,25 +5,28 @@ import com.zaxxer.hikari.HikariDataSource
 import id.neotica.data.dao.note.NoteTable
 import id.neotica.data.dao.user.UserTable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import kotlin.coroutines.CoroutineContext
 
 class DatabaseImpl(
     private val ioContext: CoroutineContext = Dispatchers.IO
 ): id.neotica.data.Database {
+    private val db: Database
     init {
         val dataSource = hikariDataSource()
-
-        Database.connect(dataSource)
-        transaction {
+        db = Database.connect(dataSource)
+        transaction(db) {
             simulateExistingDatabase()
         }
     }
 
-    override suspend fun <T> dbQuery(block: () -> T): T = withContext(ioContext) { transaction { block() } }
+    override suspend fun <T> dbQuery(block: suspend () -> T): T =
+        newSuspendedTransaction(context = ioContext, db = db) {
+            block()
+        }
 
     private fun hikariDataSource(): HikariDataSource = HikariDataSource(
         HikariConfig().apply {
