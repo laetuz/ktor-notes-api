@@ -9,24 +9,27 @@ plugins {
 group = "id.neotica"
 version = "0.0.1"
 
-kotlin {
-    sourceSets {
-        main {
-            kotlin.srcDirs("../src/main/kotlin","../src/main/java")
-            resources.srcDirs("../src/main/resources")
-        }
-        test {
-            kotlin.srcDirs("../src/test/kotlin")
-            resources.srcDirs("../src/test/resources")
-        }
+sourceSets {
+    main {
+        java.srcDirs("../src/main/java")
+        kotlin.srcDirs("../src/main/kotlin")
+        resources.srcDirs("../src/main/resources")
     }
+    test {
+        kotlin.srcDirs("../src/test/kotlin")
+        resources.srcDirs("../src/test/resources")
+    }
+}
+
+kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }
 
 application {
-    mainClass = "io.ktor.server.netty.EngineMain"
+    mainClass.set("io.ktor.server.netty.EngineMain")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
 
 java {
