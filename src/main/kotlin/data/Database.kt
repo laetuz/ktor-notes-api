@@ -1,5 +1,5 @@
 package id.neotica.data
 
 interface Database {
-    suspend fun <T> dbQuery(block: () -> T): T
+    suspend fun <T> dbQuery(block: suspend () -> T): T
 }
