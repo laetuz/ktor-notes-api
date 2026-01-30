@@ -1,7 +1,7 @@
 package id.neotica.di
 
 import id.neotica.data.Database
-import id.neotica.data.DatabaseFactory
+import id.neotica.data.DatabaseImpl
 import id.neotica.data.repository.AuthRepositoryImpl
 import id.neotica.data.repository.NotesRepositoryImpl
 import id.neotica.data.repository.UserRepositoryImpl
@@ -17,7 +17,8 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appModule = module {
-    single<Database> { DatabaseFactory.create() }
+    single<Database> { DatabaseImpl() }
+
     //repositories
     singleOf(::NotesRepositoryImpl).bind(NotesRepository::class)
     singleOf(::AuthRepositoryImpl).bind(AuthRepository::class)
